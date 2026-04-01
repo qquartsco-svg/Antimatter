@@ -5,8 +5,9 @@
 **반물질 전반을 다루기 위한 기초 레이어이되, 출발점은 여전히 phenomenology와 engineering screening**
 
 **우산 허브(층위·통합 API):** [_staging/Antimatter_Foundation/README.md](../Antimatter_Foundation/README.md) — `layer_manifest()`, `run_unified_antimatter_stack()`.
+단, 이 저장소를 **단독 클론**해서 보는 경우 위 경로는 로컬에 없을 수 있습니다. 그 경우 이 README만으로도 전체 개념과 공개 API를 읽을 수 있게 작성했습니다.
 
-## 한눈에 보기
+## What It Is
 
 이 저장소는 “반물질을 발견하는 장비”가 아닙니다.
 대신 다음 질문들을 **보수적으로 구조화**하는 기초 레이어입니다.
@@ -20,7 +21,7 @@
 즉 이 엔진의 역할은 “반물질을 크게 주장”하는 것이 아니라,
 **반물질처럼 예민한 주제를 물리학·공학·서사 층으로 분리해서 조심스럽게 읽는 것**입니다.
 
-## 물질과 반물질이란 무엇인가
+## What Matter And Antimatter Are
 
 현대 입자물리학에서 많은 입자는 대응되는 **반입자(antiparticle)** 를 가집니다.
 
@@ -33,7 +34,7 @@
 다만 보통 물질과 만나면 매우 빠르게 **소멸(annihilation)** 하므로,
 일상적인 환경에서는 거시적 반물질이 남아 있기 어렵습니다.
 
-## 왜 반물질이 중요한가
+## Why It Matters
 
 반물질은 단지 SF적 호기심 대상이 아니라, 현대 물리학의 핵심 질문과 연결됩니다.
 
@@ -53,7 +54,7 @@
    - “반물질 이동 성공” 같은 뉴스가 실제로 무엇을 뜻하는가
    - 실험실 trap 이송과 거시적 반물질 운송을 구분해야 한다
 
-## 왜 이 엔진이 필요한가
+## Why This Engine Exists
 
 반물질은 개념적으로 생소하고, 대중 서사에서는 과장되기 쉬운 주제입니다.
 그래서 바로 “추적”, “발견”, “응용”으로 점프하면 해석이 쉽게 흐려집니다.
@@ -84,7 +85,7 @@ python scripts/verify_package_identity.py
 python -m pytest tests/test_package_integrity.py -q
 ```
 
-## 이번 버전의 목표
+## What It Does Now
 
 이 패키지는 “반물질의 모든 것”을 완성하는 최종 엔진은 아닙니다.
 대신 반물질 문제를 최소한 아래 5개 층으로 분해해
@@ -120,7 +121,16 @@ python -m pytest tests/test_package_integrity.py -q
 - **asymmetry 접근 프레임** — 관측된 `η_B`와 Sakharov 조건 proxy를 분리해서 보기
 - **서사/에이전트용 Claim 스크리닝** — “대기 중 매크로 반물질” 같은 주장의 **서술 계층** 분류 (진리 판정 아님)
 
-## 핵심 정체성 (00_BRAIN 정렬)
+## What It Does Not Do
+
+- 실제 검출기 DAQ나 trap telemetry ingest
+- accelerator control
+- Monte Carlo transport
+- precision cosmology solver
+- 실시간 laboratory automation
+- “반물질 물체”의 야외 탐지/추적
+
+## Identity (00_BRAIN 정렬)
 
 | 이 엔진이 하는 일 | 하지 않는 일 |
 |------------------|----------------|
@@ -146,7 +156,7 @@ python -m pytest tests/test_package_integrity.py -q
 - precision cosmology solver
 - 실시간 laboratory automation
 
-## 모듈
+## Modules
 
 | 모듈 | 역할 |
 |------|------|
@@ -159,7 +169,7 @@ python -m pytest tests/test_package_integrity.py -q
 | `screening.py` | `screen_claim()`, `payload_from_news_style_summary()` |
 | `constants.py` | SI 상수 (차수용) |
 
-## Observer / Foundation 구조
+## Outputs
 
 현재 이 엔진은 다음 observer들을 느슨하게 묶는 foundation 역할을 합니다.
 
@@ -186,7 +196,28 @@ python -m pytest tests/test_package_integrity.py -q
 이게 중요한 이유는, 반물질처럼 민감한 주제에서는
 `결론`보다 `근거 구조`가 더 중요하기 때문입니다.
 
-## 빠른 실행
+여기서 구분도 중요합니다.
+
+- `screening tier`
+  - claim payload 하나를 어떻게 읽을지에 대한 **서술층 판정**
+  - 예: `consistent_with_known_physics`, `needs_engineered_confinement`
+- `foundation stage`
+  - rarity/transport/asymmetry/inventory를 종합한 **전체 구조 정렬도**
+  - 예: `positive`, `neutral`, `cautious`, `negative`
+
+즉 `tier`는 **claim-level**, `stage`는 **foundation-level** 언어입니다.
+
+## Test Status
+
+현재 검증 기준:
+
+- 전체 테스트: `14 passed`
+- package integrity test 포함
+- `verify_package_identity.py` 포함
+- `release_check.py` 통과
+- `SIGNATURE.sha256` 무결성 검증 통과
+
+## Quick Start
 
 ```bash
 cd _staging/Antimatter_Phenomenology_Engine
@@ -261,7 +292,7 @@ print(foundation.omega_foundation_0_1, foundation.summary)
 print(foundation.stage, foundation.evidence_tags)
 ```
 
-## 이번 확장 핵심
+## Engineering Intuition
 
 ### 1. 반물질 이동은 무엇이 성공한 것인가
 
@@ -297,7 +328,7 @@ print(foundation.stage, foundation.evidence_tags)
 이 수식들은 **정밀 입자 수송 시뮬레이터**가 아니라,
 `order-of-magnitude screening`과 `engineering intuition`용입니다.
 
-## 왜 “추적”을 말하나
+## Why “Tracking” Appears Here
 
 여기서 `tracking`은 레이더로 반물질을 쫓는다는 뜻이 아닙니다.
 현재 이 엔진에서의 추적은 더 보수적인 의미입니다.
@@ -310,7 +341,7 @@ print(foundation.stage, foundation.evidence_tags)
 즉 이 엔진은 **반물질 객체를 추적**하기보다,
 **반물질 관련 주장·조건·위험·미해결성의 구조를 추적**합니다.
 
-## 현재 한계와 보수적 해석
+## Limits And Conservative Interpretation
 
 - 실제 검출기 DAQ나 trap telemetry를 읽는 엔진이 아닙니다.
 - Monte Carlo 수송, QED/QCD 고정밀 계산, early-universe finite-temperature simulator가 아닙니다.
@@ -320,7 +351,7 @@ print(foundation.stage, foundation.evidence_tags)
 즉 지금 엔진은 “반물질이 가능하다”를 크게 말하는 도구가 아니라,
 **무엇이 실제 실험실 조건이고, 무엇이 아직 미해결이며, 무엇이 차수상 무리인지**를 정리하는 기초 레이어입니다.
 
-## 활용성
+## Practical Uses
 
 현재 시점의 현실적인 활용성은 다음과 같습니다.
 
@@ -340,7 +371,7 @@ print(foundation.stage, foundation.evidence_tags)
    - trap transport에서 어떤 조건이 핵심인지 가볍게 설명
    - 실험실과 대중 서사를 구분
 
-## 확장성과 다음 단계
+## Future Split
 
 이 엔진은 처음부터 “최종 반물질 엔진”을 목표로 하지 않았습니다.
 대신 아래로 분화될 수 있는 기반을 깔고 있습니다.

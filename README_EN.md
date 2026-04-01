@@ -5,8 +5,9 @@
 **A foundation layer for antimatter topics, starting from phenomenology and engineering screening**
 
 **Umbrella hub (layer map + unified API):** [_staging/Antimatter_Foundation/README_EN.md](../Antimatter_Foundation/README_EN.md) — `layer_manifest()`, `run_unified_antimatter_stack()`.
+If you use this repository as a **standalone clone**, that local umbrella path may not exist. This README is written so the package still makes sense on its own.
 
-## At a glance
+## What It Is
 
 This repository is **not** a device that detects antimatter in the wild.
 It is a conservative foundation layer for structuring questions such as:
@@ -20,7 +21,7 @@ It is a conservative foundation layer for structuring questions such as:
 The goal is not to make antimatter sound grand.  
 The goal is to make antimatter **legible, cautious, and decomposed**.
 
-## What are matter and antimatter?
+## What Matter And Antimatter Are
 
 In modern particle physics, many particles have corresponding **antiparticles**.
 
@@ -34,7 +35,7 @@ It is physically real. The difficulty is that antimatter and ordinary matter ten
 **annihilate** when they come into contact, so macroscopic persistence requires
 extreme isolation and engineered confinement.
 
-## Why antimatter matters
+## Why It Matters
 
 Antimatter is important because it touches several core questions at once.
 
@@ -75,7 +76,7 @@ It structures:
 - **Energetics framing** — rest-mass annihilation energy scale
 - **Narrative claim screening** — tiers for agent payloads (not truth adjudication)
 
-## Why this engine exists
+## Why This Engine Exists
 
 Antimatter is easy to overstate.
 Popular narratives often skip directly from “it exists” to “it can be moved, stored,
@@ -95,6 +96,15 @@ So the engine separates:
   - whether a claim is underspecified
   - whether it is merely speculative or actually order-of-magnitude inconsistent
 
+## What It Does Not Do
+
+- detector DAQ ingestion
+- accelerator control
+- Monte Carlo transport
+- precision cosmology solving
+- laboratory automation
+- field tracking of free antimatter objects
+
 ## Identity (00_BRAIN style)
 
 | Does | Does not |
@@ -103,7 +113,7 @@ So the engine separates:
 | List **mainstream open questions** | Assert new physics |
 | Score **payload completeness** (`omega_structure`) | Prove non-human technology |
 
-## Four-stage assessment language
+## Four-Stage Assessment Language
 
 The current version normalizes observer outputs into a common four-stage language:
 
@@ -132,7 +142,7 @@ not as the whole assessment language by itself.
 | `screening.py` | `screen_claim()`, `payload_from_news_style_summary()` |
 | `constants.py` | SI constants for scaling |
 
-## Observer / foundation structure
+## Outputs
 
 This package currently acts as a loose foundation across several observers:
 
@@ -157,7 +167,26 @@ The foundation report no longer exposes only one aggregate score. It now also ca
 That is deliberate. For antimatter, the important thing is often not the headline verdict,
 but **why** a cautious verdict was reached.
 
-## Quick start
+There is also an important distinction:
+
+- `screening tier`
+  - a **claim-level** language for a specific payload
+- `foundation stage`
+  - a **foundation-level** summary across rarity, transport, asymmetry, and inventory
+
+So `tier` is claim-scoped, while `stage` is engine-scoped.
+
+## Test Status
+
+Current validation status:
+
+- full test suite: `14 passed`
+- package integrity tests included
+- `verify_package_identity.py` included
+- `release_check.py` passing
+- `SIGNATURE.sha256` integrity verification passing
+
+## Quick Start
 
 ```bash
 cd _staging/Antimatter_Phenomenology_Engine
