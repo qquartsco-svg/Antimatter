@@ -1,6 +1,7 @@
 import math
 
 from antimatter_phenomenology import (
+    AntimatterAssessmentStage,
     AntimatterAsymmetryContext,
     AntimatterConfinementContext,
     AntimatterInventory,
@@ -9,6 +10,7 @@ from antimatter_phenomenology import (
     assess_annihilation_energy,
     assess_antimatter_foundation,
     assess_asymmetry_model,
+    assess_rarity_foundation,
     assess_trap_transport,
     baryon_asymmetry_open_questions,
     observed_baryon_to_photon_ratio,
@@ -30,6 +32,16 @@ def test_rarity_axes_non_empty():
     names = {a.name for a in axes}
     assert "annihilation" in names
     assert "cosmological_asymmetry" in names
+
+
+def test_rarity_foundation_is_conservative():
+    rarity = assess_rarity_foundation()
+    assert rarity.score_0_1 > 0.0
+    assert rarity.stage in (
+        AntimatterAssessmentStage.CAUTIOUS,
+        AntimatterAssessmentStage.POSITIVE,
+    )
+    assert rarity.unresolved_question_count >= 1
 
 
 def test_open_questions():
@@ -54,10 +66,15 @@ def test_screen_news_payload():
         PlausibilityTier.CONSISTENT_WITH_KNOWN_PHYSICS,
         PlausibilityTier.NEEDS_ENGINEERED_CONFINEMENT,
     )
+    assert res.stage in (
+        AntimatterAssessmentStage.POSITIVE,
+        AntimatterAssessmentStage.CAUTIOUS,
+    )
 
     bad = payload_from_news_style_summary(moved_trapped_sample=False)
     res_bad = screen_claim(bad)
     assert res_bad.tier == PlausibilityTier.CONTRADICTS_ORDER_OF_MAGNITUDE
+    assert res_bad.stage == AntimatterAssessmentStage.NEGATIVE
 
 
 def test_observed_eta_b_positive():
@@ -121,4 +138,10 @@ def test_foundation_report():
         ),
     )
     assert report.omega_foundation_0_1 > 0.0
+    assert report.rarity_score_0_1 > 0.0
+    assert report.transport_score_0_1 > 0.0
+    assert report.asymmetry_score_0_1 > 0.0
+    assert report.inventory_score_0_1 == 1.0
+    assert report.stage == AntimatterAssessmentStage.CAUTIOUS
+    assert "cosmological_asymmetry_open" in report.evidence_tags
     assert report.summary

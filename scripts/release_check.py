@@ -14,6 +14,7 @@ def run(*args: str) -> None:
 
 def main() -> int:
     run(sys.executable, "-m", "pytest", "tests", "-q")
+    run(sys.executable, "scripts/verify_package_identity.py")
     run(sys.executable, "scripts/verify_signature.py")
     run(sys.executable, "scripts/cleanup_generated.py")
     print("release_check: OK")

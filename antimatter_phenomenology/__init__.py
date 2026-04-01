@@ -14,11 +14,14 @@ from .asymmetry import (
     sakharov_viability_score,
 )
 from .contracts import (
+    AntimatterAssessmentStage,
     AntimatterAsymmetryContext,
+    AntimatterConfidence,
     AntimatterConfinementContext,
     AntimatterDomain,
     AntimatterFoundationReport,
     AntimatterInventory,
+    AntimatterProvenance,
 )
 from .energetics import (
     AnnihilationEnergyAssessment,
@@ -26,13 +29,20 @@ from .energetics import (
     assess_annihilation_energy,
 )
 from .foundation import assess_antimatter_foundation
-from .rarity import baryon_asymmetry_open_questions, why_antimatter_is_rare_axes
+from .rarity import (
+    RarityAssessment,
+    assess_rarity_foundation,
+    baryon_asymmetry_open_questions,
+    why_antimatter_is_rare_axes,
+)
 from .transport import (
     TrapTransportAssessment,
     TrapTransportScenario,
     assess_trap_transport,
     confinement_length_scale_m,
+    cyclotron_radius_m,
     mean_free_path_in_matter_m,
+    relativistic_larmor_radius_m,
 )
 from .screening import ClaimScreeningResult, screen_claim
 
@@ -41,14 +51,19 @@ __all__ = [
     "why_antimatter_is_rare_axes",
     "SakharovProxyInputs",
     "AsymmetryAssessment",
+    "AntimatterAssessmentStage",
     "AntimatterDomain",
+    "AntimatterConfidence",
     "AntimatterInventory",
     "AntimatterConfinementContext",
     "AntimatterAsymmetryContext",
     "AntimatterFoundationReport",
+    "AntimatterProvenance",
+    "RarityAssessment",
     "AnnihilationEnergyAssessment",
     "observed_baryon_to_photon_ratio",
     "sakharov_viability_score",
+    "assess_rarity_foundation",
     "assess_asymmetry_model",
     "annihilation_energy_j",
     "assess_annihilation_energy",
@@ -57,9 +72,11 @@ __all__ = [
     "assess_trap_transport",
     "assess_antimatter_foundation",
     "confinement_length_scale_m",
+    "cyclotron_radius_m",
     "mean_free_path_in_matter_m",
+    "relativistic_larmor_radius_m",
     "ClaimScreeningResult",
     "screen_claim",
 ]
 
-__version__ = "0.3.0"
+__version__ = "0.3.1"

@@ -8,13 +8,17 @@ from __future__ import annotations
 
 from .asymmetry import assess_asymmetry_model
 from .contracts import (
+    AntimatterAssessmentStage,
     AntimatterAsymmetryContext,
+    AntimatterConfidence,
     AntimatterConfinementContext,
     AntimatterDomain,
     AntimatterFoundationReport,
     AntimatterInventory,
+    AntimatterProvenance,
 )
 from .energetics import assess_annihilation_energy
+from .rarity import assess_rarity_foundation
 from .transport import TrapTransportScenario, assess_trap_transport
 
 
@@ -24,6 +28,7 @@ def assess_antimatter_foundation(
     confinement: AntimatterConfinementContext,
     asymmetry: AntimatterAsymmetryContext,
 ) -> AntimatterFoundationReport:
+    rarity = assess_rarity_foundation()
     transport = assess_trap_transport(
         TrapTransportScenario(
             particle_count=inventory.antiparticle_count,
@@ -36,21 +41,29 @@ def assess_antimatter_foundation(
     )
     asym = assess_asymmetry_model(asymmetry)
     energy = assess_annihilation_energy(antimatter_mass_kg=inventory.estimated_mass_kg)
+    inventory_score = 1.0 if inventory.antiparticle_count > 0 else 0.0
 
     omega = (
-        0.40 * transport.survival_probability_proxy_0_1
-        + 0.35 * asym.sakharov_score_0_1
-        + 0.25 * (1.0 if inventory.antiparticle_count > 0 else 0.0)
+        0.25 * rarity.score_0_1
+        + 0.30 * transport.survival_probability_proxy_0_1
+        + 0.25 * asym.sakharov_score_0_1
+        + 0.20 * inventory_score
     )
 
     if inventory.antiparticle_count <= 0:
         summary = "No trapped antimatter inventory is present; this remains a conceptual foundation state."
         risk = "no_inventory"
         recommendation = "Start from phenomenology and confinement requirements before transport claims."
+        stage = AntimatterAssessmentStage.NEUTRAL
+        confidence = AntimatterConfidence.MEDIUM
+        evidence_tags = ("no_inventory", "conceptual_only", *rarity.evidence_tags)
     elif transport.survival_probability_proxy_0_1 < 0.5:
         summary = "Confinement margins are weak; laboratory transport stability is the dominant bottleneck."
         risk = "trap_instability"
         recommendation = "Increase UHV, magnetic-field margin, cryogenic stability, and shock isolation."
+        stage = AntimatterAssessmentStage.CAUTIOUS
+        confidence = AntimatterConfidence.MEDIUM
+        evidence_tags = ("trap_instability", "lab_transport_limit", *rarity.evidence_tags)
     else:
         summary = "Micro-sample confinement and transport look structurally plausible within laboratory assumptions."
         risk = "cosmological_asymmetry_unsolved"
@@ -58,6 +71,12 @@ def assess_antimatter_foundation(
             "Treat transport success and matter-antimatter asymmetry as separate questions: "
             "engineering may work while baryogenesis remains unresolved."
         )
+        stage = AntimatterAssessmentStage.CAUTIOUS
+        confidence = AntimatterConfidence.MEDIUM
+        evidence_tags = ("micro_sample_transport_plausible", "baryogenesis_open", *rarity.evidence_tags)
+
+    if asym.sakharov_score_0_1 < 0.35:
+        stage = AntimatterAssessmentStage.CAUTIOUS if stage != AntimatterAssessmentStage.NEUTRAL else stage
 
     if energy.total_annihilation_energy_j > 0.0:
         summary += f" Rest-energy proxy is {energy.total_annihilation_energy_j:.3e} J."
@@ -65,6 +84,18 @@ def assess_antimatter_foundation(
     return AntimatterFoundationReport(
         domain=AntimatterDomain.PHENOMENOLOGY,
         omega_foundation_0_1=max(0.0, min(1.0, omega)),
+        stage=stage,
+        confidence=confidence,
+        provenance=(
+            rarity.provenance,
+            AntimatterProvenance.LAB_CONSTRAINTS,
+            AntimatterProvenance.ORDER_OF_MAGNITUDE_SCREENING,
+        ),
+        rarity_score_0_1=rarity.score_0_1,
+        transport_score_0_1=transport.survival_probability_proxy_0_1,
+        asymmetry_score_0_1=asym.sakharov_score_0_1,
+        inventory_score_0_1=inventory_score,
+        evidence_tags=tuple(dict.fromkeys(evidence_tags)),
         summary=summary,
         key_risk=risk,
         recommendation=recommendation,

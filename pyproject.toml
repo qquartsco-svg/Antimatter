@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "antimatter-phenomenology-engine"
-version = "0.3.0"
+version = "0.3.1"
 description = "Educational screening: antimatter rarity, confinement scales, and claim plausibility (not experimental tracking)."
 requires-python = ">=3.10"
 readme = "README.md"

@@ -7,6 +7,12 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Any, Dict, List, Mapping, Optional
 
+from .contracts import (
+    AntimatterAssessmentStage,
+    AntimatterConfidence,
+    AntimatterProvenance,
+)
+
 
 class PlausibilityTier(str, Enum):
     CONSISTENT_WITH_KNOWN_PHYSICS = "consistent_with_known_physics"
@@ -18,6 +24,9 @@ class PlausibilityTier(str, Enum):
 @dataclass(frozen=True)
 class ClaimScreeningResult:
     tier: PlausibilityTier
+    stage: AntimatterAssessmentStage
+    confidence: AntimatterConfidence
+    provenance: AntimatterProvenance
     notes: List[str]
     omega_structure: float  # 0–1 structural completeness of claim payload (not physical truth)
 
@@ -56,6 +65,9 @@ def screen_claim(payload: Mapping[str, Any]) -> ClaimScreeningResult:
         notes.append("Tags invoke mechanisms outside validated phenomenology for this engine.")
         return ClaimScreeningResult(
             tier=PlausibilityTier.SPECULATIVE_BEYOND_SM,
+            stage=AntimatterAssessmentStage.NEGATIVE,
+            confidence=AntimatterConfidence.LOW,
+            provenance=AntimatterProvenance.NARRATIVE_PAYLOAD,
             notes=notes,
             omega_structure=omega_structure,
         )
@@ -64,6 +76,9 @@ def screen_claim(payload: Mapping[str, Any]) -> ClaimScreeningResult:
         notes.append("Macroscopic antimatter in atmosphere contradicts annihilation time/density scales.")
         return ClaimScreeningResult(
             tier=PlausibilityTier.CONTRADICTS_ORDER_OF_MAGNITUDE,
+            stage=AntimatterAssessmentStage.NEGATIVE,
+            confidence=AntimatterConfidence.HIGH,
+            provenance=AntimatterProvenance.ORDER_OF_MAGNITUDE_SCREENING,
             notes=notes,
             omega_structure=omega_structure,
         )
@@ -74,12 +89,26 @@ def screen_claim(payload: Mapping[str, Any]) -> ClaimScreeningResult:
         if b_t is None:
             notes.append("Missing asserted |B|; confinement not structurally specified.")
             tier = PlausibilityTier.NEEDS_ENGINEERED_CONFINEMENT
-        return ClaimScreeningResult(tier=tier, notes=notes, omega_structure=omega_structure)
+        return ClaimScreeningResult(
+            tier=tier,
+            stage=(
+                AntimatterAssessmentStage.POSITIVE
+                if tier == PlausibilityTier.CONSISTENT_WITH_KNOWN_PHYSICS
+                else AntimatterAssessmentStage.CAUTIOUS
+            ),
+            confidence=AntimatterConfidence.MEDIUM,
+            provenance=AntimatterProvenance.LAB_CONSTRAINTS,
+            notes=notes,
+            omega_structure=omega_structure,
+        )
 
     if env == "interstellar":
         notes.append("Cosmic-ray antiparticles exist; bulk antimatter astrophysics is tightly constrained.")
         return ClaimScreeningResult(
             tier=PlausibilityTier.NEEDS_ENGINEERED_CONFINEMENT,
+            stage=AntimatterAssessmentStage.CAUTIOUS,
+            confidence=AntimatterConfidence.LOW,
+            provenance=AntimatterProvenance.COSMOLOGY_PRIOR,
             notes=notes,
             omega_structure=omega_structure,
         )
@@ -87,6 +116,9 @@ def screen_claim(payload: Mapping[str, Any]) -> ClaimScreeningResult:
     notes.append("Insufficient environment tag for screening; treat as underspecified.")
     return ClaimScreeningResult(
         tier=PlausibilityTier.NEEDS_ENGINEERED_CONFINEMENT,
+        stage=AntimatterAssessmentStage.NEUTRAL,
+        confidence=AntimatterConfidence.LOW,
+        provenance=AntimatterProvenance.NARRATIVE_PAYLOAD,
         notes=notes,
         omega_structure=omega_structure,
     )

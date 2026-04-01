@@ -9,6 +9,12 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import List
 
+from .contracts import (
+    AntimatterAssessmentStage,
+    AntimatterConfidence,
+    AntimatterProvenance,
+)
+
 
 @dataclass(frozen=True)
 class RarityAxis:
@@ -17,6 +23,17 @@ class RarityAxis:
     name: str
     summary: str
     detail: str
+
+
+@dataclass(frozen=True)
+class RarityAssessment:
+    score_0_1: float
+    stage: AntimatterAssessmentStage
+    confidence: AntimatterConfidence
+    provenance: AntimatterProvenance
+    unresolved_question_count: int
+    summary: str
+    evidence_tags: List[str]
 
 
 def why_antimatter_is_rare_axes() -> List[RarityAxis]:
@@ -79,3 +96,43 @@ def baryon_asymmetry_open_questions() -> List[str]:
         "Role of neutrino sector (leptogenesis) vs electroweak baryogenesis?",
         "Gravitational or higher-dimension effects — speculative until constrained by data.",
     ]
+
+
+def assess_rarity_foundation() -> RarityAssessment:
+    """
+    Summarize how mature the engine's *framing* of antimatter rarity is.
+
+    This is intentionally conservative: the structure is mainstream and useful,
+    but the cosmological origin of the asymmetry remains unresolved.
+    """
+    axes = why_antimatter_is_rare_axes()
+    open_questions = baryon_asymmetry_open_questions()
+    structural_completeness = min(1.0, len(axes) / 3.0)
+    unresolved_penalty = min(0.35, 0.05 * len(open_questions))
+    score = max(0.0, min(1.0, 0.85 * structural_completeness - unresolved_penalty))
+
+    if score >= 0.75:
+        stage = AntimatterAssessmentStage.POSITIVE
+    elif score >= 0.55:
+        stage = AntimatterAssessmentStage.CAUTIOUS
+    elif score >= 0.35:
+        stage = AntimatterAssessmentStage.NEUTRAL
+    else:
+        stage = AntimatterAssessmentStage.NEGATIVE
+
+    return RarityAssessment(
+        score_0_1=score,
+        stage=stage,
+        confidence=AntimatterConfidence.MEDIUM,
+        provenance=AntimatterProvenance.COSMOLOGY_PRIOR,
+        unresolved_question_count=len(open_questions),
+        summary=(
+            "Antimatter rarity is structurally framed by annihilation, cosmological asymmetry, "
+            "and laboratory scarcity, but the baryogenesis mechanism remains unresolved."
+        ),
+        evidence_tags=[
+            "annihilation_axis",
+            "cosmological_asymmetry_open",
+            "laboratory_scale_limit",
+        ],
+    )
