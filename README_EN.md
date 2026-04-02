@@ -248,7 +248,7 @@ foundation = assess_antimatter_foundation(
 )
 ```
 
-## Why antimatter is scarce (skeleton)
+## A structure for inferring why antimatter is scarce
 
 1. **Annihilation** — contact with ordinary matter removes antimatter quickly without engineered vacuum + fields.  
 2. **Cosmological asymmetry** — the visible universe is **matter-dominated**; the dynamical origin of η_B remains an **open problem** in particle cosmology.  
